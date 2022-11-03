@@ -181,6 +181,51 @@ class person{
         }
         
     }
+
+    static async getAll(req, res){
+        try{
+            const users = await Person.find({})
+            res.send(users)
+        }
+        catch(err){
+            res.send(err.message)
+        }
+    }
+
+    static async update(req, res){
+        try{
+            let user = await Person.findOne({_id:req.params.id})
+            if(user){
+                user.name = req.body.name
+                user.age = req.body.age
+                user.favoriteFoods = req.body.favoriteFoods
+                await user.save()
+                res.send(user)
+            }
+            else{
+                res.send("user not found")
+            }
+        }
+        catch(err){
+            res.send(err.message)
+        }
+    }
+
+    static async delete(req, res){
+        try{
+            let user = await Person.findOne({_id:req.params.id})
+            if(user){
+                await user.remove()
+                res.send("user deleted")
+            }
+            else{
+                res.send("user not found")
+            }
+        }
+        catch(err){
+            res.send(err.message)
+        }
+    }
     
 }
 
